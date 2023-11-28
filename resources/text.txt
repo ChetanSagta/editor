@@ -1,0 +1,2 @@
+This is a dummy text file
+with 2 files as input
