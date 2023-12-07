@@ -1,10 +1,10 @@
 #include "TextRenderer.h"
-#include <SDL2/SDL_render.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_surface.h>
 #include <SDL2/SDL_ttf.h>
 #include <spdlog/spdlog.h>
 
 void TextRenderer::setFont(std::string font_path, const int font_height = 24) {
-
   m_font = TTF_OpenFont(font_path.c_str(), font_height);
   if (m_font == nullptr) {
     SPDLOG_ERROR("Unable to open font! Error: {}\n", SDL_GetError());
@@ -13,32 +13,42 @@ void TextRenderer::setFont(std::string font_path, const int font_height = 24) {
   }
 }
 
-void TextRenderer::set_font_dimen(int font_height, int font_width) {
-  this->m_font_height = font_height;
-  this->m_font_width = font_width;
+void TextRenderer::render_text(SDL_Window *window, SDL_Renderer *renderer, std::string text, SDL_Color fg) {
+  int wh = 0, wb = 0, x = 0, y = 0;
+  SDL_GetWindowSize(window, &wh, &wb);
+  SPDLOG_INFO("Window Height: {}, Breadth:{}\n", wh, wb);
+  for (ulong i = 0; i < text.length(); i++) {
+    x += m_current_x;
+    if (x > wb) {
+      y += m_current_y;
+      x = 0;
+    }
+    render_char(renderer, text[i], fg, {x, y});
+  }
 }
 
-void TextRenderer::render_char(SDL_Renderer *renderer, SDL_Texture *texture, char ch, SDL_Color fg, Pos pos) {
-  SDL_Surface *surface = TTF_RenderGlyph_Solid(m_font, ch, fg);
+void TextRenderer::render_char(SDL_Renderer *renderer, char ch, SDL_Color fg,
+                               Pos pos) {
+  SDL_Color blue = SDL_Color{0, 0, 255, 0};
+  SDL_Surface *surface = TTF_RenderGlyph32_Solid(m_font, ch, blue);
   if (surface == nullptr) {
     SPDLOG_ERROR("Unable to create render text solid! Error: {}\n",
                  SDL_GetError());
   }
+  int success = TTF_SizeUTF8(m_font, &ch, &m_current_x, &m_current_y);
+  if (success == -1) {
+    SPDLOG_ERROR("Unable to find font size! Error: {}\n", TTF_GetError());
+  }
   SDL_Rect src;
   src.x = pos.x;
   src.y = pos.y;
-  src.w = surface->w;
-  src.h = surface->h;
+  src.w = m_current_x;
+  src.h = m_current_y;
 
-  /*SDL_Rect dst;*/
-  /*dst.x = pos.x;*/
-  /*dst.y = pos.y;*/
-  /*src.w = surface->w;*/
-  /*src.h = surface->h;*/
-
-  SDL_RenderClear(renderer);
+  SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
+  SDL_FreeSurface(surface);
+  surface = nullptr;
   SDL_RenderCopy(renderer, texture, NULL, &src);
-  SDL_SetRenderDrawColor(renderer, fg.r, fg.g, fg.b, fg.a);
-  /*SDL_SetRenderDrawColor(renderer, 0,0,0,0);*/
+  SDL_SetRenderDrawColor(renderer, fg.r, fg.g, fg.b, SDL_ALPHA_OPAQUE);
   SDL_RenderPresent(renderer);
 }
