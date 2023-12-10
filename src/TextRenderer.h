@@ -10,6 +10,7 @@ public:
   void setFont(std::string font_path, int font_height);
   void render_char(SDL_Renderer* renderer, char ch, SDL_Color fg,Pos pos);
   void render_text(SDL_Window* window, SDL_Renderer *renderer, std::string text, SDL_Color fg);
+  Pos getFontDimension();
 
 private:
   TTF_Font *m_font;

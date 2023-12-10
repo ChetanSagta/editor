@@ -13,6 +13,7 @@ public:
   void setSurface(SDL_Surface *surface);
   void eventLoop();
   void handleEvent();
+  void updateCursor(int x, int y);
 
 private:
   SDL_Window *m_window;
@@ -26,4 +27,5 @@ private:
   Pos cursorPos;
   EventHandler* eHandler;
   TextRenderer textRenderer;
+  SDL_Rect cursor;
 };

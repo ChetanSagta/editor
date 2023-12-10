@@ -8,7 +8,7 @@
 
 int main(int, char *[]) {
 
-  AppWindow *mainWindow = new AppWindow("Text Editor", 0, 0, 800, 600);
+  AppWindow *mainWindow = new AppWindow("Text Editor", 0, 0,800, 600);
   mainWindow->eventLoop();
   return 0;
 }

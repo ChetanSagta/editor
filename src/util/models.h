@@ -10,3 +10,8 @@ enum MODE{
   NORMAL, 
   VISUAL
 };
+
+struct Line{
+  int number;
+  char* content;
+};

@@ -33,6 +33,9 @@ void NormalModeHandler::handle(SDL_Event e, std::string&, bool* quit, MODE* mode
       case SDLK_q:
           *quit = true;
           break;
+      case SDLK_CAPSLOCK:
+        toggleCaps();
+        break;
       default:
         SPDLOG_WARN("Event {} not handle", keysym.sym);
       }
