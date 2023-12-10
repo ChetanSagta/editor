@@ -61,8 +61,8 @@ AppWindow::AppWindow(std::string title, int x, int y, int width, int height)
   SDL_FreeSurface(surface);
   surface = nullptr;
   SDL_RenderCopy(m_renderer, texture, NULL, &src);
-  SDL_Color fg = BLUE;
-  SDL_SetRenderDrawColor(m_renderer, fg.r, fg.g, fg.b, SDL_ALPHA_OPAQUE);
+  /*SDL_Color fg = BLUE;*/
+  /*SDL_SetRenderDrawColor(m_renderer, fg.r, fg.g, fg.b, SDL_ALPHA_OPAQUE);*/
   SDL_RenderPresent(m_renderer);
 }
 
@@ -82,7 +82,11 @@ void AppWindow::eventLoop() {
   m_bufferedText = "";
   while (!quit) {
     handleEvent();
+    if(eHandler->shouldClearRender()){
+      SDL_RenderClear(m_renderer);
+    }
     textRenderer.render_text(m_window, m_renderer, m_bufferedText, GREEN);
+    eHandler->clearRenderer(false);
   }
 }
 

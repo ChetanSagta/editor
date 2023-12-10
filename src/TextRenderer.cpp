@@ -35,9 +35,8 @@ void TextRenderer::render_text(SDL_Window *window, SDL_Renderer *renderer, std::
   }
 }
 
-void TextRenderer::render_char(SDL_Renderer *renderer, char ch, SDL_Color fg,
-                               Pos pos) {
-  SDL_Surface *surface = TTF_RenderGlyph32_Solid(m_font, ch, BLUE);
+void TextRenderer::render_char(SDL_Renderer *renderer, char ch, SDL_Color fg, Pos pos) {
+  SDL_Surface *surface = TTF_RenderGlyph32_Solid(m_font, ch, fg);
   if (surface == nullptr) {
     SPDLOG_ERROR("Unable to create render text solid! Error: {}\n",
                  SDL_GetError());

@@ -1,9 +1,7 @@
 #include "InsertModeHandler.h"
 #include <SDL2/SDL_keycode.h>
-#include <locale>
 
-void InsertModeHandler::handle(SDL_Event e, std::string &bufferedText,
-                               bool *quit, MODE *mode) {
+void InsertModeHandler::handle(SDL_Event e, std::string &bufferedText, bool *quit, MODE *mode) {
   while (SDL_PollEvent(&e) != 0) {
     if (e.type == SDL_QUIT)
       *quit = true;
@@ -30,6 +28,7 @@ void InsertModeHandler::handle(SDL_Event e, std::string &bufferedText,
         break;
       case SDLK_BACKSPACE:
         bufferedText = helper.remove_last_char(bufferedText);
+        clearRenderer(true);
         break;
       default:
         const char *ch = SDL_GetKeyName(keysym.sym);

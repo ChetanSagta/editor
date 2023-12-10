@@ -10,6 +10,9 @@ public:
   void toggleCaps();
   bool isCapsOn();
   Helper helper;
+  bool shouldClearRender();
+  void clearRenderer(bool value);
 private:
   bool caps_on;
+  bool clear;
 };
