@@ -15,21 +15,25 @@ add_executable(${PROJECT_NAME}
     src/main.cpp
     src/AppWindow.h
     src/AppWindow.cpp
-    src/TextRenderer.cpp
-    src/TextRenderer.h
-    src/util/file_helper.cpp
-    src/util/file_helper.h
-    src/util/NotImplementedYetException.h
-    src/util/NotImplementedYetException.cpp
-    src/util/models.h
-    src/util/helper.h
-    src/util/helper.cpp
     src/handler/EventHandler.h
     src/handler/EventHandler.cpp
     src/handler/InsertModeHandler.cpp
     src/handler/InsertModeHandler.cpp
     src/handler/NormalModeHandler.h
-    src/handler/NormalModeHandler.cpp)
+    src/handler/NormalModeHandler.cpp
+    src/render/Line.h
+    src/render/Line.cpp
+    src/render/TextRenderer.cpp
+    src/render/TextRenderer.h
+    src/util/file_helper.cpp
+    src/util/file_helper.h
+    src/util/fontmanager.h
+    src/util/fontmanager.cpp
+    src/util/NotImplementedYetException.h
+    src/util/NotImplementedYetException.cpp
+    src/util/models.h
+    src/util/helper.h
+    src/util/helper.cpp)
 target_link_libraries(${PROJECT_NAME} PRIVATE ${SDL2_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} PRIVATE ${SDL2TTF_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} PRIVATE spdlog::spdlog)

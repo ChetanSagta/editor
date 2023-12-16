@@ -5,13 +5,13 @@ struct Pos{
   int y;
 };
 
+struct Dimen{
+  int height;
+  int width;
+};
+
 enum MODE{
   INSERT, 
   NORMAL, 
   VISUAL
-};
-
-struct Line{
-  int number;
-  char* content;
 };

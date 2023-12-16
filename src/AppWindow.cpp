@@ -1,5 +1,4 @@
 #include "AppWindow.h"
-#include "TextRenderer.h"
 #include "handler/InsertModeHandler.h"
 #include "handler/NormalModeHandler.h"
 #include "util/constants.h"
@@ -9,6 +8,7 @@
 #include <SDL2/SDL_mouse.h>
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_surface.h>
+#include <SDL2/SDL_timer.h>
 #include <SDL2/SDL_ttf.h>
 #include <iostream>
 #include <spdlog/spdlog.h>
@@ -37,9 +37,11 @@ AppWindow::AppWindow(std::string title, int x, int y, int width, int height)
   }
 
   SDL_Surface *surface = SDL_GetWindowSurface(m_window);
-  std::string font =
+  std::string fontpath =
       "/home/chetan/.fonts/Iosevka Term Nerd Font Complete Mono.ttf";
-  textRenderer.setFont(font.c_str(), FONT_SIZE);
+  m_font_manager.set_font_path(fontpath, FONT_SIZE);
+  textRenderer.set_font_manager(&m_font_manager);
+  /*textRenderer.setFont(font.c_str(), FONT_SIZE);*/
   cursorPos = textRenderer.getFontDimension();
 
   SDL_Rect src;
@@ -61,7 +63,7 @@ AppWindow::AppWindow(std::string title, int x, int y, int width, int height)
   SDL_FreeSurface(surface);
   surface = nullptr;
   SDL_RenderCopy(m_renderer, texture, NULL, &src);
-  /*SDL_Color fg = BLUE;*/
+  /*SDL_Color fg = BLACK;*/
   /*SDL_SetRenderDrawColor(m_renderer, fg.r, fg.g, fg.b, SDL_ALPHA_OPAQUE);*/
   SDL_RenderPresent(m_renderer);
 }
@@ -75,18 +77,23 @@ AppWindow::~AppWindow() {
   SDL_Quit();
   m_window = nullptr;
   m_renderer = nullptr;
-  m_font = nullptr;
 }
 
 void AppWindow::eventLoop() {
   m_bufferedText = "";
+  int delayRate = 30;
   while (!quit) {
+    int start = SDL_GetTicks();
     handleEvent();
-    if(eHandler->shouldClearRender()){
-      SDL_RenderClear(m_renderer);
+    if (eHandler->shouldClearRender()) {
+      /*SDL_RenderClear(m_renderer);*/
+      eHandler->clearRenderer(false);
+    }
+    int end = SDL_GetTicks();
+    if (end - start < delayRate) {
+      SDL_Delay(delayRate - end + start);
     }
     textRenderer.render_text(m_window, m_renderer, m_bufferedText, GREEN);
-    eHandler->clearRenderer(false);
   }
 }
 
