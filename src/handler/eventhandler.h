@@ -2,7 +2,7 @@
 #include <SDL2/SDL_events.h>
 #include<string>
 #include"../util/models.h"
-#include "../render/Line.h"
+#include "../render/line.h"
 #include "../render/cursor.h"
 
 class EventHandler{

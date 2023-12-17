@@ -1,6 +1,6 @@
 #pragma once
 
-#include "TextRenderer.h"
+#include "textrenderer.h"
 #include <string>
 
 class Line {

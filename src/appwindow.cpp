@@ -1,6 +1,6 @@
-#include "AppWindow.h"
-#include "handler/InsertModeHandler.h"
-#include "handler/NormalModeHandler.h"
+#include "appwindow.h"
+#include "handler/insertmodehandler.h"
+#include "handler/normalmodehandler.h"
 #include "util/constants.h"
 #include "util/models.h"
 #include <SDL2/SDL.h>

@@ -13,26 +13,26 @@ PKG_SEARCH_MODULE(SDL2TTF REQUIRED SDL2_ttf>=2.0.0)
 
 add_executable(${PROJECT_NAME}
     src/main.cpp
-    src/AppWindow.h
-    src/AppWindow.cpp
-    src/handler/EventHandler.h
-    src/handler/EventHandler.cpp
-    src/handler/InsertModeHandler.cpp
-    src/handler/InsertModeHandler.cpp
-    src/handler/NormalModeHandler.h
-    src/handler/NormalModeHandler.cpp
+    src/appwindow.h
+    src/appwindow.cpp
+    src/handler/eventhandler.h
+    src/handler/eventhandler.cpp
+    src/handler/insertmodehandler.cpp
+    src/handler/insertmodehandler.cpp
+    src/handler/normalmodehandler.h
+    src/handler/normalmodehandler.cpp
     src/render/cursor.h
     src/render/cursor.cpp
-    src/render/Line.h
-    src/render/Line.cpp
-    src/render/TextRenderer.cpp
-    src/render/TextRenderer.h
+    src/render/line.h
+    src/render/line.cpp
+    src/render/textrenderer.cpp
+    src/render/textrenderer.h
     src/util/file_helper.cpp
     src/util/file_helper.h
     src/util/fontmanager.h
     src/util/fontmanager.cpp
-    src/util/NotImplementedYetException.h
-    src/util/NotImplementedYetException.cpp
+    src/util/notimplementedyetexception.h
+    src/util/notimplementedyetexception.cpp
     src/util/models.h)
 target_link_libraries(${PROJECT_NAME} PRIVATE ${SDL2_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} PRIVATE ${SDL2TTF_LIBRARIES})

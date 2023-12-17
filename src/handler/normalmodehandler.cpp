@@ -1,4 +1,4 @@
-#include "NormalModeHandler.h"
+#include "normalmodehandler.h"
 #include <iostream>
 #include <spdlog/spdlog.h>
 

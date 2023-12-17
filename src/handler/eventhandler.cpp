@@ -1,4 +1,4 @@
-#include "EventHandler.h"
+#include "eventhandler.h"
 
 void EventHandler::toggleCaps(){
   caps_on = !caps_on;

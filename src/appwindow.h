@@ -1,7 +1,7 @@
 #pragma once
-#include "render/Line.h"
-#include "render/TextRenderer.h"
-#include "handler/EventHandler.h"
+#include "render/line.h"
+#include "render/textrenderer.h"
+#include "handler/eventhandler.h"
 #include "render/cursor.h"
 #include "util/fontmanager.h"
 #include "util/models.h"

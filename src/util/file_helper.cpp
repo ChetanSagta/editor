@@ -2,7 +2,7 @@
 #include <SDL2/SDL_rwops.h>
 #include <spdlog/spdlog.h>
 #include <string>
-#include "NotImplementedYetException.h"
+#include "notimplementedyetexception.h"
 
 std::string FileHelper::read_from_file(std::string filepath) {
   SDL_RWops *file = SDL_RWFromFile(filepath.c_str(), "r+b");

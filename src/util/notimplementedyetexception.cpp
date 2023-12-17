@@ -1,4 +1,4 @@
-#include "NotImplementedYetException.h"
+#include "notimplementedyetexception.h"
 
 NotImplementedYetException::NotImplementedYetException(){
 

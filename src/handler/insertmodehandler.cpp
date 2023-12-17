@@ -1,4 +1,4 @@
-#include "InsertModeHandler.h"
+#include "insertmodehandler.h"
 #include <SDL2/SDL_keycode.h>
 #include <spdlog/spdlog.h>
 

@@ -4,7 +4,7 @@
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_video.h>
 #include <iostream>
-#include "AppWindow.h"
+#include "appwindow.h"
 
 int main(int, char *[]) {
 

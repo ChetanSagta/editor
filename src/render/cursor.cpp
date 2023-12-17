@@ -30,7 +30,7 @@ void Cursor::moveleft(){
   x-=h;
   if(x <0){
       x = 0;
-    }
+  }
 }
 
 void Cursor::movedown(){
