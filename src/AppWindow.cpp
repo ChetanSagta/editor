@@ -16,6 +16,10 @@
 
 AppWindow::AppWindow(std::string title, int x, int y, int width, int height)
     : m_mode{MODE::NORMAL}, eHandler{nullptr} {
+  m_current_line = &lines.front();
+  if (m_current_line == nullptr) {
+    m_current_line = new Line();
+  }
   if (SDL_Init(SDL_INIT_VIDEO) < 0) {
     SPDLOG_INFO("Couldn't initialize SDL: {}\n", SDL_GetError());
     exit(1);
@@ -42,7 +46,6 @@ AppWindow::AppWindow(std::string title, int x, int y, int width, int height)
   m_font_manager.set_font_path(fontpath, FONT_SIZE);
   textRenderer.set_font_manager(&m_font_manager);
   /*textRenderer.setFont(font.c_str(), FONT_SIZE);*/
-  cursorPos = textRenderer.getFontDimension();
 
   SDL_Rect src;
   src.x = 0;
@@ -50,14 +53,6 @@ AppWindow::AppWindow(std::string title, int x, int y, int width, int height)
   src.w = surface->w;
   src.h = surface->h;
 
-  cursor.x = 0;
-  cursor.y = 0;
-  SPDLOG_INFO("Cursor W: {}, H:{}", cursorPos.x, cursorPos.y);
-  cursor.w = FONT_SIZE;
-  cursor.h = cursorPos.y;
-
-  SDL_RenderDrawRect(m_renderer, &cursor);
-  SDL_FillRect(surface, &cursor, 255);
   /*SDL_RenderFillRect(m_renderer, &cursor);*/
   SDL_Texture *texture = SDL_CreateTextureFromSurface(m_renderer, surface);
   SDL_FreeSurface(surface);
@@ -69,8 +64,8 @@ AppWindow::AppWindow(std::string title, int x, int y, int width, int height)
 }
 
 void AppWindow::updateCursor(int x, int y) {
-  cursorPos.x = x;
-  cursorPos.y = y;
+  cursor.setX(x);
+  cursor.setY(y);
 }
 
 AppWindow::~AppWindow() {
@@ -81,20 +76,21 @@ AppWindow::~AppWindow() {
 
 void AppWindow::eventLoop() {
   m_bufferedText = "";
-  int delayRate = 30;
   while (!quit) {
-    int start = SDL_GetTicks();
     handleEvent();
-    if (eHandler->shouldClearRender()) {
-      /*SDL_RenderClear(m_renderer);*/
-      eHandler->clearRenderer(false);
-    }
-    int end = SDL_GetTicks();
-    if (end - start < delayRate) {
-      SDL_Delay(delayRate - end + start);
-    }
-    textRenderer.render_text(m_window, m_renderer, m_bufferedText, GREEN);
+    renderCursor();
+    // textRenderer.render_text(m_window, m_renderer, m_current_line->getText(), GREEN);
+    // for(ulong i=0;i<lines.size();i++){
+      // std::cout<<i<<" "<<lines[i].getText()<<std::endl;
+    // }
   }
+}
+
+void AppWindow::renderCursor(){
+  SDL_Rect rect = cursor.getRect();
+  SDL_SetRenderDrawColor(m_renderer,GREEN.r, GREEN.g, GREEN.b, GREEN.a);
+  SDL_RenderFillRect(m_renderer,&rect);
+  SDL_RenderPresent(m_renderer);
 }
 
 void AppWindow::handleEvent() {
@@ -104,6 +100,11 @@ void AppWindow::handleEvent() {
   } else if (m_mode == INSERT) {
     eHandler = new InsertModeHandler();
   }
-  eHandler->handle(e, m_bufferedText, &quit, &m_mode);
+  eHandler->handle(&e, m_current_line, &quit, &m_mode,&cursor);
+  if ((e.type == SDL_KEYDOWN) && (e.key.keysym.sym == SDLK_RETURN)){
+    lines.push_back(*m_current_line);
+    m_current_line = new Line();
+    return;
+  }
 }
 void AppWindow::readFile(std::string) {}

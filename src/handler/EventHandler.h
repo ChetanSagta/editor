@@ -2,14 +2,14 @@
 #include <SDL2/SDL_events.h>
 #include<string>
 #include"../util/models.h"
-#include "../util/helper.h"
+#include "../render/Line.h"
+#include "../render/cursor.h"
 
 class EventHandler{
 public:
-  virtual void handle(SDL_Event e, std::string&, bool*, MODE*)=0;
+  virtual void handle(SDL_Event* e, Line* line,bool*, MODE*, Cursor*)=0;
   void toggleCaps();
   bool isCapsOn();
-  Helper helper;
   bool shouldClearRender();
   void clearRenderer(bool value);
 private:

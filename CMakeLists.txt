@@ -21,6 +21,8 @@ add_executable(${PROJECT_NAME}
     src/handler/InsertModeHandler.cpp
     src/handler/NormalModeHandler.h
     src/handler/NormalModeHandler.cpp
+    src/render/cursor.h
+    src/render/cursor.cpp
     src/render/Line.h
     src/render/Line.cpp
     src/render/TextRenderer.cpp
@@ -31,9 +33,7 @@ add_executable(${PROJECT_NAME}
     src/util/fontmanager.cpp
     src/util/NotImplementedYetException.h
     src/util/NotImplementedYetException.cpp
-    src/util/models.h
-    src/util/helper.h
-    src/util/helper.cpp)
+    src/util/models.h)
 target_link_libraries(${PROJECT_NAME} PRIVATE ${SDL2_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} PRIVATE ${SDL2TTF_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} PRIVATE spdlog::spdlog)

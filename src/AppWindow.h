@@ -2,6 +2,7 @@
 #include "render/Line.h"
 #include "render/TextRenderer.h"
 #include "handler/EventHandler.h"
+#include "render/cursor.h"
 #include "util/fontmanager.h"
 #include "util/models.h"
 #include <SDL2/SDL.h>
@@ -27,10 +28,12 @@ private:
   std::string m_bufferedText="";
   MODE m_mode;
   void readFile(std::string file);
-  Pos cursorPos;
   EventHandler* eHandler;
   TextRenderer textRenderer;
-  SDL_Rect cursor;
+  Cursor cursor;
   std::vector<Line> lines;
+  Line* m_current_line;
   friend class Line;
+
+  void renderCursor();
 };

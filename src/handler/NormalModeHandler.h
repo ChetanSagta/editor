@@ -4,5 +4,5 @@
 #include "EventHandler.h"
 class NormalModeHandler: public EventHandler{
   public:
-  void handle(SDL_Event e, std::string&, bool*, MODE*) override;
+  void handle(SDL_Event* e,Line* line, bool*, MODE*, Cursor*) override;
 };
