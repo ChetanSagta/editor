@@ -9,4 +9,4 @@ const SDL_Color GREEN = {0, 255, 0, 0};
 const SDL_Color BLUE = {0, 0, 255, 0};
 const SDL_Color BLACK= {0,0,0,0};
 
-const int FONT_SIZE = 18;
+const int FONT_SIZE = 20;

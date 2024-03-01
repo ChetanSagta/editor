@@ -12,7 +12,9 @@ public:
   bool isCapsOn();
   bool shouldClearRender();
   void clearRenderer(bool value);
+  virtual ~EventHandler() = default;
+  EventHandler();
 private:
-  bool caps_on;
+  bool caps_on = false;
   bool clear;
 };

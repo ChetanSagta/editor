@@ -16,6 +16,8 @@
 
 AppWindow::AppWindow(std::string title, int x, int y, int width, int height)
     : m_mode{MODE::NORMAL}, eHandler{nullptr} {
+  m_iHandler = new InsertModeHandler();
+  m_nHandler = new NormalModeHandler();
   m_current_line = &lines.front();
   if (m_current_line == nullptr) {
     m_current_line = new Line();
@@ -79,32 +81,36 @@ void AppWindow::eventLoop() {
   while (!quit) {
     handleEvent();
     renderCursor();
-    // textRenderer.render_text(m_window, m_renderer, m_current_line->getText(), GREEN);
-    // for(ulong i=0;i<lines.size();i++){
-      // std::cout<<i<<" "<<lines[i].getText()<<std::endl;
-    // }
+    textRenderer.render_text(m_window, m_renderer, m_current_line->getText(),
+                             GREEN);
+    /*for(ulong i=0;i<lines.size();i++){*/
+    /*  std::cout<<i<<" "<<lines[i].getText()<<std::endl;*/
+    /* }*/
   }
 }
 
-void AppWindow::renderCursor(){
+void AppWindow::renderCursor() {
   SDL_Rect rect = cursor.getRect();
-  SDL_SetRenderDrawColor(m_renderer,GREEN.r, GREEN.g, GREEN.b, GREEN.a);
-  SDL_RenderFillRect(m_renderer,&rect);
+  SDL_SetRenderDrawColor(m_renderer, GREEN.r, GREEN.g, GREEN.b, GREEN.a);
+  SDL_RenderFillRect(m_renderer, &rect);
+  SDL_RenderPresent(m_renderer);
+}
+
+void AppWindow::clearCursor() {
+  SDL_Rect rect = cursor.getRect();
+  SDL_SetRenderDrawColor(m_renderer, BLACK.r, BLACK.g, BLACK.b, BLACK.a);
+  SDL_RenderFillRect(m_renderer, &rect);
   SDL_RenderPresent(m_renderer);
 }
 
 void AppWindow::handleEvent() {
   SDL_Event e;
   if (m_mode == NORMAL) {
-    eHandler = new NormalModeHandler();
+    eHandler = m_nHandler;
   } else if (m_mode == INSERT) {
-    eHandler = new InsertModeHandler();
+    eHandler = m_iHandler;
   }
-  eHandler->handle(&e, m_current_line, &quit, &m_mode,&cursor);
-  if ((e.type == SDL_KEYDOWN) && (e.key.keysym.sym == SDLK_RETURN)){
-    lines.push_back(*m_current_line);
-    m_current_line = new Line();
-    return;
-  }
+  eHandler->handle(&e, m_current_line, &quit, &m_mode, &cursor);
 }
+
 void AppWindow::readFile(std::string) {}

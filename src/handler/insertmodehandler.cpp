@@ -1,10 +1,12 @@
 #include "insertmodehandler.h"
+#include "../util/string_helper.h"
 #include <SDL2/SDL_keycode.h>
+#include <fmt/core.h>
 #include <spdlog/spdlog.h>
 
-void InsertModeHandler::handle(SDL_Event* e, Line *line, bool *quit,
-                               MODE *mode,Cursor* cursor) {
-  if(SDL_PollEvent(e) != 0) {
+void InsertModeHandler::handle(SDL_Event *e, Line *line, bool *quit, MODE *mode,
+                               Cursor *cursor) {
+  if (SDL_PollEvent(e) != 0) {
     if ((*e).type == SDL_QUIT)
       *quit = true;
     else if ((*e).type == SDL_KEYDOWN) {
@@ -25,34 +27,49 @@ void InsertModeHandler::handle(SDL_Event* e, Line *line, bool *quit,
       case SDLK_LEFT:
         cursor->moveleft();
         break;
-      case SDLK_i:
-        line->addChars("i");
-        break;
-      case SDLK_q:
-        line->addChars("q");
-        break;
       case SDLK_RETURN:
         /*bufferedText.append("\n");*/
         // TODO: add new line here
         break;
       case SDLK_CAPSLOCK:
+        SPDLOG_INFO("CapsLock is {}", isCapsOn());
+        toggleCaps();
+        break;
+      case SDLK_LSHIFT:
+      case SDLK_RSHIFT:
         toggleCaps();
         break;
       case SDLK_SPACE:
-        line->addChars(" ");
+        line->addCharsAtEnd(" ");
         break;
       case SDLK_BACKSPACE:
-        line->removeChar();
+        line->removeCharAtEnd();
         clearRenderer(true);
         break;
       default:
-        const char *ch = SDL_GetKeyName(keysym.sym);
-        /*if (!isCapsOn()) {*/
-        /*  const char chr = std::tolower(static_cast<unsigned char>(*ch));*/
-        /*  bufferedText.append(&chr);*/
-        /*} else*/
-        line->addChars(ch);
+        std::string keyname = SDL_GetKeyName(keysym.sym);
+        if (isCapsOn()) {
+          line->addCharsAtEnd(to_upper(keyname));
+        } else {
+          line->addCharsAtEnd(to_lower(keyname));
+        }
+      }
+    } else if ((*e).type == SDL_KEYUP) {
+      SDL_Keysym keysym = (*e).key.keysym;
+      switch (keysym.sym) {
+      case SDLK_LSHIFT:
+      case SDLK_RSHIFT:
+        toggleCaps();
+        break;
       }
     }
   }
+}
+
+void InsertModeHandler::toggleCaps(){
+  caps_on = !caps_on;
+}
+
+bool InsertModeHandler::isCapsOn(){
+  return caps_on;
 }

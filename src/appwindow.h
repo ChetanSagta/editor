@@ -1,4 +1,6 @@
 #pragma once
+#include "handler/insertmodehandler.h"
+#include "handler/normalmodehandler.h"
 #include "render/line.h"
 #include "render/textrenderer.h"
 #include "handler/eventhandler.h"
@@ -29,6 +31,8 @@ private:
   MODE m_mode;
   void readFile(std::string file);
   EventHandler* eHandler;
+  InsertModeHandler* m_iHandler;
+  NormalModeHandler* m_nHandler;
   TextRenderer textRenderer;
   Cursor cursor;
   std::vector<Line> lines;
@@ -36,4 +40,5 @@ private:
   friend class Line;
 
   void renderCursor();
+  void clearCursor();
 };

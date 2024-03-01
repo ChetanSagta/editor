@@ -8,9 +8,9 @@ public:
   void updateContent(std::string content);
   void renderText(int x, int y);
   void renderText();
-  void removeChar();
-  void removeChars(int count);
-  void addChars(std::string characters);
+  void removeCharAtEnd();
+  void removeCharsAtEnd(int count);
+  void addCharsAtEnd(std::string characters);
   std::string getText();
   void print();
 

@@ -1,15 +1,21 @@
 #include "eventhandler.h"
+#include <iostream>
+#include <spdlog/spdlog.h>
+
+EventHandler::EventHandler(){
+  EventHandler::caps_on = false;
+}
 
 void EventHandler::toggleCaps(){
-  caps_on = !caps_on;
+  EventHandler::caps_on = !EventHandler::caps_on;
 }
 
 bool EventHandler::isCapsOn(){
-  return caps_on;
+  return EventHandler::caps_on;
 }
 
 void EventHandler::clearRenderer(bool value){
-  this->clear = value;
+  clear = value;
 }
 
 bool EventHandler::shouldClearRender(){

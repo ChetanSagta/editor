@@ -11,26 +11,26 @@ void Line::renderText(int, int) {
 void Line::renderText(){
 }
 
-void Line::removeChars(int count) {
+void Line::removeCharsAtEnd(int count) {
   if (count <= (int)m_content.length()) {
     for (int i = 0; i <= count; i++) {
-      removeChar();
+      removeCharAtEnd();
     }
   }
 }
 
-void Line::removeChar() {
+void Line::removeCharAtEnd() {
   int length = m_content.length();
   if (length > 0)
     m_content.substr(0, length - 1);
 }
 
-void Line::addChars(std::string characaters){
+void Line::addCharsAtEnd(std::string characaters){
   m_content.append(characaters);
 }
 
 void Line::print(){
-  std::cout<<m_content<<std::endl;
+  SPDLOG_INFO("{}",m_content);
 }
 
 std::string Line::getText(){

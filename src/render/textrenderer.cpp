@@ -5,20 +5,6 @@
 #include <SDL2/SDL_ttf.h>
 #include <spdlog/spdlog.h>
 
-/*void TextRenderer::setFont(std::string font_path, const int font_height = 24)
- * {*/
-/*  m_font = TTF_OpenFont(font_path.c_str(), font_height);*/
-/*  if (m_font == nullptr) {*/
-/*    SPDLOG_ERROR("Unable to open font! Error: {}\n", SDL_GetError());*/
-/*    SDL_Quit();*/
-/*    exit(1);*/
-/*  }*/
-/*  int success = TTF_SizeUTF8(m_font, "", &m_current_x, &m_current_y);*/
-/*  if (success == -1) {*/
-/*    SPDLOG_ERROR("Unable to find font size! Error: {}\n", TTF_GetError());*/
-/*  }*/
-/*}*/
-
 void TextRenderer::set_font_manager(FontManager* fontmanager) {
   this->m_font_manager = fontmanager;
   this->m_font = this->m_font_manager->get_font();
@@ -42,15 +28,13 @@ void TextRenderer::render_text(SDL_Window *window, SDL_Renderer *renderer,
 
 void TextRenderer::render_char(SDL_Renderer *renderer, char ch, SDL_Color fg,
                                Pos pos) {
-  SDL_Surface *surface = TTF_RenderGlyph32_Solid(m_font, ch, fg);
+  SDL_Surface *surface = TTF_RenderGlyph_Solid(m_font, ch, fg);
   if (surface == nullptr) {
     SPDLOG_ERROR("Unable to create render text solid! Error: {}\n",
                  SDL_GetError());
   }
-  int success = TTF_SizeUTF8(m_font, &ch, &m_current_x, &m_current_y);
-  if (success == -1) {
-    SPDLOG_ERROR("Unable to find font size! Error: {}\n", TTF_GetError());
-  }
+  m_current_x = surface->w;
+  m_current_y = surface->h;
   SDL_Rect src;
   src.x = pos.x;
   src.y = pos.y;
