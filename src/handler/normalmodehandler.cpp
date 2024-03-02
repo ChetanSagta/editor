@@ -4,7 +4,6 @@
 
 void NormalModeHandler::handle(SDL_Event *e, Line *, bool *quit, MODE *mode,
                                Cursor *) {
-  if (SDL_PollEvent(e) != 0) {
     if ((*e).type == SDL_QUIT)
       *quit = true;
     else if ((*e).type == SDL_KEYDOWN) {
@@ -41,4 +40,3 @@ void NormalModeHandler::handle(SDL_Event *e, Line *, bool *quit, MODE *mode,
       }
     }
   }
-}

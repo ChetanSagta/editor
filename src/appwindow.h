@@ -24,6 +24,7 @@ public:
 private:
   SDL_Window *m_window;
   SDL_Renderer *m_renderer;
+  SDL_Event m_event;
   FontManager m_font_manager;
   bool quit = false;
   bool read= false;
@@ -38,7 +39,6 @@ private:
   std::vector<Line> lines;
   Line* m_current_line;
   friend class Line;
-
   void renderCursor();
   void clearCursor();
 };

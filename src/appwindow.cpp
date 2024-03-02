@@ -4,6 +4,7 @@
 #include "util/constants.h"
 #include "util/models.h"
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_events.h>
 #include <SDL2/SDL_keycode.h>
 #include <SDL2/SDL_mouse.h>
 #include <SDL2/SDL_render.h>
@@ -60,6 +61,7 @@ AppWindow::AppWindow(std::string title, int x, int y, int width, int height)
   SDL_FreeSurface(surface);
   surface = nullptr;
   SDL_RenderCopy(m_renderer, texture, NULL, &src);
+  SDL_DestroyTexture(texture);
   /*SDL_Color fg = BLACK;*/
   /*SDL_SetRenderDrawColor(m_renderer, fg.r, fg.g, fg.b, SDL_ALPHA_OPAQUE);*/
   SDL_RenderPresent(m_renderer);
@@ -79,13 +81,15 @@ AppWindow::~AppWindow() {
 void AppWindow::eventLoop() {
   m_bufferedText = "";
   while (!quit) {
-    handleEvent();
-    renderCursor();
-    textRenderer.render_text(m_window, m_renderer, m_current_line->getText(),
-                             GREEN);
+    while (SDL_PollEvent(&m_event) != 0) {
+      handleEvent();
+    }
     /*for(ulong i=0;i<lines.size();i++){*/
     /*  std::cout<<i<<" "<<lines[i].getText()<<std::endl;*/
     /* }*/
+    renderCursor();
+    textRenderer.render_text(m_window, m_renderer, m_current_line->getText(),
+                             GREEN);
   }
 }
 
@@ -104,13 +108,12 @@ void AppWindow::clearCursor() {
 }
 
 void AppWindow::handleEvent() {
-  SDL_Event e;
   if (m_mode == NORMAL) {
     eHandler = m_nHandler;
   } else if (m_mode == INSERT) {
     eHandler = m_iHandler;
   }
-  eHandler->handle(&e, m_current_line, &quit, &m_mode, &cursor);
+  eHandler->handle(&m_event, m_current_line, &quit, &m_mode, &cursor);
 }
 
 void AppWindow::readFile(std::string) {}

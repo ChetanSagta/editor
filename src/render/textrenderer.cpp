@@ -45,6 +45,9 @@ void TextRenderer::render_char(SDL_Renderer *renderer, char ch, SDL_Color fg,
   SDL_FreeSurface(surface);
   surface = nullptr;
   SDL_RenderCopy(renderer, texture, NULL, &src);
+  if(texture != nullptr){
+    SDL_DestroyTexture(texture);
+  }
   SDL_SetRenderDrawColor(renderer, fg.r, fg.g, fg.b, SDL_ALPHA_OPAQUE);
   SDL_RenderPresent(renderer);
 }
