@@ -4,13 +4,6 @@
 
 void Line::updateContent(std::string content) { this->m_content = content; }
 
-void Line::renderText(int, int) {
-  /*this->m_textRenderer.render_text(m_window, m_surface,*/
-}
-
-void Line::renderText(){
-}
-
 void Line::removeCharsAtEnd(int count) {
   if (count <= (int)m_content.length()) {
     for (int i = 0; i <= count; i++) {
@@ -35,6 +28,10 @@ void Line::print(){
 
 std::string Line::getText(){
   return m_content;
+}
+
+void Line::setText(const std::string text){
+  this->m_content = text;
 }
 
 void Line::setWidth(int width){

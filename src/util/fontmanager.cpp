@@ -10,10 +10,6 @@ void FontManager::set_font_path(std::string font_path, int font_height){
   }
 };
 
-Dimen FontManager::get_font_dimension(){
-  return m_font_dimen;
-}
-
 TTF_Font* FontManager::get_font(){
   return this->m_font;
 }

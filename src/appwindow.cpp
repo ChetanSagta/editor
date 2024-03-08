@@ -44,7 +44,7 @@ AppWindow::AppWindow(std::string title, int x, int y, int width, int height)
   }
 
   SDL_Surface *surface = SDL_GetWindowSurface(m_window);
-  std::string fontpath =
+  const std::string fontpath =
       "/home/chetan/.fonts/Iosevka Term Nerd Font Complete Mono.ttf";
   m_font_manager.set_font_path(fontpath, FONT_SIZE);
   textRenderer.set_font_manager(&m_font_manager);
@@ -82,18 +82,35 @@ void AppWindow::eventLoop() {
   m_bufferedText = "";
   while (!quit) {
     while (SDL_PollEvent(&m_event) != 0) {
-      handleEvent();
+      if (m_event.type == SDL_QUIT) {
+        quit = true;
+      } else {
+        clearCursor();
+        handleEvent();
+      }
+      cursor.reset();
+      for (size_t i = 0; i < lines.size(); i++) {
+        std::string current_line_text = lines.at(i).getText();
+        if (current_line_text.size() > 0) {
+          textRenderer.render_text(m_window, m_renderer, current_line_text,
+                                   GREEN, &cursor);
+        }
+        cursor.moveToNextLine();
+      }
+      if (m_current_line->getText().size() > 0) {
+        textRenderer.render_text(m_window, m_renderer,
+                                 m_current_line->getText(), GREEN, &cursor);
+      }
     }
-    /*for(ulong i=0;i<lines.size();i++){*/
-    /*  std::cout<<i<<" "<<lines[i].getText()<<std::endl;*/
-    /* }*/
+    clearCursor();
     renderCursor();
-    textRenderer.render_text(m_window, m_renderer, m_current_line->getText(),
-                             GREEN);
   }
 }
 
 void AppWindow::renderCursor() {
+  /*clearCursor();*/
+  /*std::cout<<"Line Width: "<<m_current_line->getText().size()<<"Font Width: "<<FONT_SIZE<<std::endl;*/
+  /*cursor.setX(m_current_line->getText().size()*FONT_SIZE);*/
   SDL_Rect rect = cursor.getRect();
   SDL_SetRenderDrawColor(m_renderer, GREEN.r, GREEN.g, GREEN.b, GREEN.a);
   SDL_RenderFillRect(m_renderer, &rect);
@@ -113,7 +130,7 @@ void AppWindow::handleEvent() {
   } else if (m_mode == INSERT) {
     eHandler = m_iHandler;
   }
-  eHandler->handle(&m_event, m_current_line, &quit, &m_mode, &cursor);
+  eHandler->handle(&m_event, &lines, m_current_line, &quit, &m_mode, &cursor);
 }
 
 void AppWindow::readFile(std::string) {}

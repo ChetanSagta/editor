@@ -1,10 +1,10 @@
 #include "insertmodehandler.h"
 #include "../util/string_helper.h"
 #include <SDL2/SDL_keycode.h>
-#include <fmt/core.h>
 #include <spdlog/spdlog.h>
 
-void InsertModeHandler::handle(SDL_Event *e, Line *line, bool *quit, MODE *mode,
+void InsertModeHandler::handle(SDL_Event *e, std::vector<Line>* lines,
+                               Line *line, bool *quit, MODE *mode,
                                Cursor *cursor) {
   if ((*e).type == SDL_QUIT)
     *quit = true;
@@ -27,11 +27,11 @@ void InsertModeHandler::handle(SDL_Event *e, Line *line, bool *quit, MODE *mode,
       cursor->moveleft();
       break;
     case SDLK_RETURN:
-      /*bufferedText.append("\n");*/
-      // TODO: add new line here
+      lines->push_back(*line);
+      line->setText("");
+      /*cursor->moveToNextLine();*/
       break;
     case SDLK_CAPSLOCK:
-      SPDLOG_INFO("CapsLock is {}", isCapsOn());
       toggleCaps();
       break;
     case SDLK_LSHIFT:

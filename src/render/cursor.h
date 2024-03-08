@@ -20,7 +20,11 @@ public:
   void movedown();
   void moveright();
   void moveleft();
+  void moveToNextLine();
+  void reset();
   SDL_Rect getRect();
+  void set_last_line_height(int);
  private:
   int x, y, w, h;
+  int last_line_height;
 };

@@ -2,7 +2,7 @@
 #include <iostream>
 #include <spdlog/spdlog.h>
 
-void NormalModeHandler::handle(SDL_Event *e, Line *, bool *quit, MODE *mode,
+void NormalModeHandler::handle(SDL_Event *e, std::vector<Line>*,Line *, bool *quit, MODE *mode,
                                Cursor *) {
     if ((*e).type == SDL_QUIT)
       *quit = true;
