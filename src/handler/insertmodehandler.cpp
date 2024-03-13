@@ -3,33 +3,21 @@
 #include <SDL2/SDL_keycode.h>
 #include <spdlog/spdlog.h>
 
-void InsertModeHandler::handle(SDL_Event *e, std::vector<Line>* lines,
-                               Line *line, bool *quit, MODE *mode,
+void InsertModeHandler::handle(SDL_Event *e, std::vector<Line> *lines,
+                               Line *line,MODE *mode,
                                Cursor *cursor) {
-  if ((*e).type == SDL_QUIT)
-    *quit = true;
-  else if ((*e).type == SDL_KEYDOWN) {
+  if ((*e).type == SDL_KEYDOWN) {
     SDL_Keysym keysym = (*e).key.keysym;
     switch (keysym.sym) {
     case SDLK_ESCAPE:
       *mode = NORMAL;
       break;
-    case SDLK_UP:
-      cursor->moveup();
-      break;
-    case SDLK_DOWN:
-      cursor->movedown();
-      break;
-    case SDLK_RIGHT:
-      cursor->moveright();
-      break;
-    case SDLK_LEFT:
-      cursor->moveleft();
-      break;
     case SDLK_RETURN:
       lines->push_back(*line);
+      line->setLineNumber(line->getLineNumber()+1);
+      line->setLastLineHeight(line->getLineHeight());
       line->setText("");
-      /*cursor->moveToNextLine();*/
+      cursor->moveToNextLine();
       break;
     case SDLK_CAPSLOCK:
       toggleCaps();
@@ -52,6 +40,7 @@ void InsertModeHandler::handle(SDL_Event *e, std::vector<Line>* lines,
       } else {
         line->addCharsAtEnd(to_lower(keyname));
       }
+      cursor->moveright();
     }
   } else if ((*e).type == SDL_KEYUP) {
     SDL_Keysym keysym = (*e).key.keysym;

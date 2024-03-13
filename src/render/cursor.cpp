@@ -1,82 +1,83 @@
 #include "cursor.h"
 #include "../util/constants.h"
+#include <spdlog/spdlog.h>
 
 Cursor::Cursor(){
-  x = 0;
-  y = 0;
-  h = FONT_SIZE;
-  w = 3;
+  this->m_x = 0;
+  this->m_y = 0;
+  this->m_h = FONT_SIZE;
+  this->m_w = 3;
 }
 
 Pos Cursor::getCurrentLocation(){
-  return {this->x, this->y};
+  return {this->m_x, this->m_y};
 }
 
 Dimen Cursor::getCursorDimension(){
-  return {this->w, this->h};
+  return {this->m_w, this->m_h};
 }
 
 void Cursor::moveup(){
-  y-=w;
-  if(y<0) y =0;
+  this->m_y-=this->m_h;
+  if(this->m_y<0) this->m_y =0;
 }
 
 void Cursor::moveright(){
-  x+=h;
+  this->m_x+=this->m_w;
 }
 
 void Cursor::moveleft(){
-  x-=h;
-  if(x <0){
-  x = 0;
+  this->m_x-=this->m_w;
+  if(this->m_x <0){
+  this->m_x = 0;
   }
 }
 
 void Cursor::movedown(){
-  y+=w;
+  this->m_y+=this->m_h;
 }
 
 int Cursor::getX() const{
-  return this->x;
+  return this->m_x;
 }
 
 int Cursor::getW() const{
-  return this->w;
+  return this->m_w;
 }
 int Cursor::getH() const{
-  return this->h;
+  return this->m_h;
 }
 int Cursor::getY() const{
-  return this->y;
+  return this->m_y;
 }
 
 void Cursor::setX(int x1){
-  this->x = x1;
+  this->m_x = x1;
 }
 void Cursor::setY(int y1){
-  this->y = y1;
+  this->m_y = y1;
 }
 void Cursor::setW(int w1){
-  this->w = w1;
+  this->m_w = w1;
 }
 void Cursor::setH(int h1){
-  this->h = h1;
+  this->m_h = h1;
 }
 
 void Cursor::set_last_line_height(int height){
-  this->last_line_height = height;
+  this->m_last_line_height = height;
 }
 
 SDL_Rect Cursor::getRect(){
-  return {this->x,this->y, this->w,this->h};
+  return {this->m_x,this->m_y, this->m_w,this->m_h};
 }
 
 void Cursor::moveToNextLine(){
-  this->y = this->getY()+this->last_line_height;
-  this->x = 0;
+  this->m_y = this->getY()+this->m_last_line_height;
+  this->m_x = 0;
 }
 
 void Cursor::reset(){
-  this->x = 0;
-  this->y = 0;
+  this->m_x = 0;
+  this->m_y = 0;
 }

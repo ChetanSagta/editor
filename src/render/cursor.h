@@ -25,6 +25,7 @@ public:
   SDL_Rect getRect();
   void set_last_line_height(int);
  private:
-  int x, y, w, h;
-  int last_line_height;
+  int m_x, m_y, m_w, m_h;
+  int m_last_line_height;
+  int m_line_number;
 };

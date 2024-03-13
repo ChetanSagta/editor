@@ -4,6 +4,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_surface.h>
 #include <SDL2/SDL_ttf.h>
+#include <spdlog/common.h>
 #include <spdlog/spdlog.h>
 
 void TextRenderer::set_font_manager(FontManager* fontmanager) {
@@ -12,22 +13,22 @@ void TextRenderer::set_font_manager(FontManager* fontmanager) {
 }
 
 void TextRenderer::render_text(SDL_Window *window, SDL_Renderer *renderer,
-                               std::string text, SDL_Color fg, Cursor *cursor) {
+                               Line *line, SDL_Color fg, Cursor *cursor, Pos pos) {
   int wh = 0, wb = 0;
   SDL_GetWindowSize(window, &wb, &wh);
-  SDL_Surface *surface = TTF_RenderText_Solid_Wrapped(m_font, text.c_str(), fg, wb);
+  SDL_Surface *surface = TTF_RenderText_Solid_Wrapped(m_font, line->getText().c_str(), fg, wb);
   if (surface == nullptr) {
     SPDLOG_ERROR("Unable to create render text solid! Error: {}\n",
                  SDL_GetError());
   }
   
   SDL_Rect src;
-  src.x = cursor->getX();
-  src.y = cursor->getY();
+  src.x = pos.x;
+  src.y = pos.y;
   src.w = surface->w;
   src.h = surface->h;
 
-  cursor->setX(cursor->getX()+surface->w);
+  line->setLineHeight(surface->h);
   cursor->set_last_line_height(surface->h);
 
   SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
@@ -64,3 +65,6 @@ void TextRenderer::render_char(SDL_Renderer *renderer, char ch, SDL_Color fg,
   SDL_SetRenderDrawColor(renderer, fg.r, fg.g, fg.b, SDL_ALPHA_OPAQUE);
   SDL_RenderPresent(renderer);
 }
+
+
+int TextRenderer::total_lines;

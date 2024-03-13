@@ -8,7 +8,7 @@
 
 class EventHandler{
 public:
-  virtual void handle(SDL_Event* e,std::vector<Line>* lines, Line* line,bool*, MODE*, Cursor*)=0;
+  virtual void handle(SDL_Event* e,std::vector<Line>* lines, Line* line, MODE*, Cursor*)=0;
   void toggleCaps();
   bool isCapsOn();
   bool shouldClearRender();

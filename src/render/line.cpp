@@ -1,3 +1,4 @@
+#include "../util/constants.h"
 #include "line.h"
 #include <spdlog/spdlog.h>
 #include<iostream>
@@ -20,6 +21,7 @@ void Line::removeCharAtEnd() {
 
 void Line::addCharsAtEnd(std::string characaters){
   m_content.append(characaters);
+  m_line_height = characaters.size()%FONT_SIZE;
 }
 
 void Line::print(){
@@ -45,4 +47,28 @@ int Line::getWidth() const{
 }
 int Line::getHeight() const{
   return this->m_height;
+}
+
+void Line::setLineNumber(const int line_number){
+  this->m_line_number = line_number;
+}
+
+int Line::getLineNumber() const{
+  return this->m_line_number;
+}
+
+void Line::setLastLineHeight(const int last_line_number){
+  this->m_last_line_height= last_line_number;
+}
+
+int Line::getLastLineHeight() const{
+  return this->m_last_line_height;
+}
+
+void Line::setLineHeight(const int line_height){
+  this->m_line_height= line_height;
+}
+
+int Line::getLineHeight() const{
+  return this->m_line_height;
 }

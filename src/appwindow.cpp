@@ -85,21 +85,45 @@ void AppWindow::eventLoop() {
       if (m_event.type == SDL_QUIT) {
         quit = true;
       } else {
+        SDL_Keysym keysym = (m_event).key.keysym;
+        switch (keysym.sym) {
+        case SDLK_UP:
+          clearCursor();
+          cursor.moveup();
+          continue;
+        case SDLK_DOWN:
+          clearCursor();
+          cursor.movedown();
+          continue;
+        case SDLK_RIGHT:
+          clearCursor();
+          cursor.moveright();
+          continue;
+        case SDLK_LEFT:
+          clearCursor();
+          cursor.moveleft();
+          continue;
+        }
         clearCursor();
         handleEvent();
-      }
-      cursor.reset();
-      for (size_t i = 0; i < lines.size(); i++) {
-        std::string current_line_text = lines.at(i).getText();
-        if (current_line_text.size() > 0) {
-          textRenderer.render_text(m_window, m_renderer, current_line_text,
-                                   GREEN, &cursor);
+        cursor.reset();
+        Pos pos = {0,0};
+        for (size_t i = 0; i < lines.size(); i++) {
+          Line *current_line = &lines.at(i);
+          pos.x = 0;
+          pos.y += current_line->getLastLineHeight();
+          if (current_line->getText().length() > 0) {
+            textRenderer.render_text(m_window, m_renderer, &lines.at(i), GREEN,
+                                     &cursor, pos);
+          }
+          cursor.moveToNextLine();
         }
-        cursor.moveToNextLine();
-      }
-      if (m_current_line->getText().size() > 0) {
-        textRenderer.render_text(m_window, m_renderer,
-                                 m_current_line->getText(), GREEN, &cursor);
+        if (m_current_line->getText().size() > 0) {
+          pos.x = 0;
+          pos.y += m_current_line->getLastLineHeight();
+          textRenderer.render_text(m_window, m_renderer, m_current_line, GREEN,
+                                   &cursor, pos);
+        }
       }
     }
     clearCursor();
@@ -108,9 +132,6 @@ void AppWindow::eventLoop() {
 }
 
 void AppWindow::renderCursor() {
-  /*clearCursor();*/
-  /*std::cout<<"Line Width: "<<m_current_line->getText().size()<<"Font Width: "<<FONT_SIZE<<std::endl;*/
-  /*cursor.setX(m_current_line->getText().size()*FONT_SIZE);*/
   SDL_Rect rect = cursor.getRect();
   SDL_SetRenderDrawColor(m_renderer, GREEN.r, GREEN.g, GREEN.b, GREEN.a);
   SDL_RenderFillRect(m_renderer, &rect);
@@ -130,7 +151,7 @@ void AppWindow::handleEvent() {
   } else if (m_mode == INSERT) {
     eHandler = m_iHandler;
   }
-  eHandler->handle(&m_event, &lines, m_current_line, &quit, &m_mode, &cursor);
+  eHandler->handle(&m_event, &lines, m_current_line, &m_mode, &cursor);
 }
 
 void AppWindow::readFile(std::string) {}
