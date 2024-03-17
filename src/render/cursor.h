@@ -10,10 +10,14 @@ public:
   void setY(int);
   void setW(int);
   void setH(int);
+  void setMaxX(int);
+  void setMaxY(int);
   int getX() const;
   int getY() const;
   int getW() const;
   int getH() const;
+  int getMaxX() const;
+  int getMaxY() const;
   Pos getCurrentLocation();
   Dimen getCursorDimension();
   void moveup();
@@ -28,4 +32,5 @@ public:
   int m_x, m_y, m_w, m_h;
   int m_last_line_height;
   int m_line_number;
+  int max_y, max_x;
 };

@@ -16,7 +16,7 @@ void Line::removeCharsAtEnd(int count) {
 void Line::removeCharAtEnd() {
   int length = m_content.length();
   if (length > 0)
-    m_content.substr(0, length - 1);
+    m_content = m_content.substr(0, length - 1);
 }
 
 void Line::addCharsAtEnd(std::string characaters){

@@ -4,6 +4,7 @@
 #include "util/constants.h"
 #include "util/models.h"
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_blendmode.h>
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_keycode.h>
 #include <SDL2/SDL_mouse.h>
@@ -11,6 +12,7 @@
 #include <SDL2/SDL_surface.h>
 #include <SDL2/SDL_timer.h>
 #include <SDL2/SDL_ttf.h>
+#include <exception>
 #include <iostream>
 #include <spdlog/spdlog.h>
 #include <string>
@@ -48,7 +50,6 @@ AppWindow::AppWindow(std::string title, int x, int y, int width, int height)
       "/home/chetan/.fonts/Iosevka Term Nerd Font Complete Mono.ttf";
   m_font_manager.set_font_path(fontpath, FONT_SIZE);
   textRenderer.set_font_manager(&m_font_manager);
-  /*textRenderer.setFont(font.c_str(), FONT_SIZE);*/
 
   SDL_Rect src;
   src.x = 0;
@@ -56,20 +57,11 @@ AppWindow::AppWindow(std::string title, int x, int y, int width, int height)
   src.w = surface->w;
   src.h = surface->h;
 
-  /*SDL_RenderFillRect(m_renderer, &cursor);*/
   SDL_Texture *texture = SDL_CreateTextureFromSurface(m_renderer, surface);
   SDL_FreeSurface(surface);
   surface = nullptr;
   SDL_RenderCopy(m_renderer, texture, NULL, &src);
   SDL_DestroyTexture(texture);
-  /*SDL_Color fg = BLACK;*/
-  /*SDL_SetRenderDrawColor(m_renderer, fg.r, fg.g, fg.b, SDL_ALPHA_OPAQUE);*/
-  SDL_RenderPresent(m_renderer);
-}
-
-void AppWindow::updateCursor(int x, int y) {
-  cursor.setX(x);
-  cursor.setY(y);
 }
 
 AppWindow::~AppWindow() {
@@ -79,35 +71,31 @@ AppWindow::~AppWindow() {
 }
 
 void AppWindow::eventLoop() {
-  m_bufferedText = "";
   while (!quit) {
     while (SDL_PollEvent(&m_event) != 0) {
+      SDL_RenderClear(m_renderer);
       if (m_event.type == SDL_QUIT) {
         quit = true;
       } else {
         SDL_Keysym keysym = (m_event).key.keysym;
         switch (keysym.sym) {
         case SDLK_UP:
-          clearCursor();
           cursor.moveup();
-          continue;
+          break;
         case SDLK_DOWN:
-          clearCursor();
           cursor.movedown();
-          continue;
+          break;
         case SDLK_RIGHT:
-          clearCursor();
           cursor.moveright();
-          continue;
+          break;
         case SDLK_LEFT:
-          clearCursor();
           cursor.moveleft();
-          continue;
+          break;
+        default:
+          handleEvent();
+          break;
         }
-        clearCursor();
-        handleEvent();
-        cursor.reset();
-        Pos pos = {0,0};
+        Pos pos = {0, 0};
         for (size_t i = 0; i < lines.size(); i++) {
           Line *current_line = &lines.at(i);
           pos.x = 0;
@@ -115,34 +103,30 @@ void AppWindow::eventLoop() {
           if (current_line->getText().length() > 0) {
             textRenderer.render_text(m_window, m_renderer, &lines.at(i), GREEN,
                                      &cursor, pos);
+            cursor.setMaxY(pos.y);
           }
-          cursor.moveToNextLine();
         }
         if (m_current_line->getText().size() > 0) {
           pos.x = 0;
           pos.y += m_current_line->getLastLineHeight();
           textRenderer.render_text(m_window, m_renderer, m_current_line, GREEN,
                                    &cursor, pos);
+          cursor.setMaxY(pos.y);
         }
       }
     }
-    clearCursor();
+    cursor.setMaxX(m_current_line->getText().length());
     renderCursor();
+    SDL_RenderPresent(m_renderer);
   }
 }
 
 void AppWindow::renderCursor() {
   SDL_Rect rect = cursor.getRect();
-  SDL_SetRenderDrawColor(m_renderer, GREEN.r, GREEN.g, GREEN.b, GREEN.a);
+  SDL_SetRenderDrawColor(m_renderer, BLUE.r, BLUE.g, BLUE.b, BLUE.a);
+  SDL_SetRenderDrawBlendMode(m_renderer, SDL_BLENDMODE_ADD);
   SDL_RenderFillRect(m_renderer, &rect);
-  SDL_RenderPresent(m_renderer);
-}
-
-void AppWindow::clearCursor() {
-  SDL_Rect rect = cursor.getRect();
   SDL_SetRenderDrawColor(m_renderer, BLACK.r, BLACK.g, BLACK.b, BLACK.a);
-  SDL_RenderFillRect(m_renderer, &rect);
-  SDL_RenderPresent(m_renderer);
 }
 
 void AppWindow::handleEvent() {

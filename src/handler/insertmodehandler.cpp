@@ -31,7 +31,7 @@ void InsertModeHandler::handle(SDL_Event *e, std::vector<Line> *lines,
       break;
     case SDLK_BACKSPACE:
       line->removeCharAtEnd();
-      clearRenderer(true);
+      cursor->moveleft();
       break;
     default:
       std::string keyname = SDL_GetKeyName(keysym.sym);

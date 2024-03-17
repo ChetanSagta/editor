@@ -11,8 +11,6 @@ public:
   virtual void handle(SDL_Event* e,std::vector<Line>* lines, Line* line, MODE*, Cursor*)=0;
   void toggleCaps();
   bool isCapsOn();
-  bool shouldClearRender();
-  void clearRenderer(bool value);
   virtual ~EventHandler() = default;
   EventHandler();
 private:

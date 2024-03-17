@@ -13,11 +13,3 @@ void EventHandler::toggleCaps(){
 bool EventHandler::isCapsOn(){
   return EventHandler::caps_on;
 }
-
-void EventHandler::clearRenderer(bool value){
-  clear = value;
-}
-
-bool EventHandler::shouldClearRender(){
-  return clear;
-}

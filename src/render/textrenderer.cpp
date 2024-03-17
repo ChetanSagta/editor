@@ -2,6 +2,7 @@
 #include "../util/constants.h"
 #include "cursor.h"
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_render.h>
 #include <SDL2/SDL_surface.h>
 #include <SDL2/SDL_ttf.h>
 #include <spdlog/common.h>
@@ -22,11 +23,11 @@ void TextRenderer::render_text(SDL_Window *window, SDL_Renderer *renderer,
                  SDL_GetError());
   }
   
-  SDL_Rect src;
-  src.x = pos.x;
-  src.y = pos.y;
-  src.w = surface->w;
-  src.h = surface->h;
+  SDL_Rect dst;
+  dst.x = pos.x;
+  dst.y = pos.y;
+  dst.w = surface->w;
+  dst.h = surface->h;
 
   line->setLineHeight(surface->h);
   cursor->set_last_line_height(surface->h);
@@ -34,12 +35,10 @@ void TextRenderer::render_text(SDL_Window *window, SDL_Renderer *renderer,
   SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
   SDL_FreeSurface(surface);
   surface = nullptr;
-  SDL_RenderCopy(renderer, texture, NULL, &src);
+  SDL_RenderCopy(renderer, texture, NULL, &dst);
   if(texture != nullptr){
     SDL_DestroyTexture(texture);
   }
-  SDL_SetRenderDrawColor(renderer, fg.r, fg.g, fg.b, SDL_ALPHA_OPAQUE);
-  SDL_RenderPresent(renderer);
 }
 
 void TextRenderer::render_char(SDL_Renderer *renderer, char ch, SDL_Color fg,
@@ -63,7 +62,6 @@ void TextRenderer::render_char(SDL_Renderer *renderer, char ch, SDL_Color fg,
     SDL_DestroyTexture(texture);
   }
   SDL_SetRenderDrawColor(renderer, fg.r, fg.g, fg.b, SDL_ALPHA_OPAQUE);
-  SDL_RenderPresent(renderer);
 }
 
 
