@@ -12,6 +12,7 @@ public:
   std::string getText();
   void setText(std::string);
   void print();
+  int getLength() const;
 
   void setWidth(int height);
   void setHeight(int width);

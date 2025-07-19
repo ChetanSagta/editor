@@ -4,8 +4,7 @@
 #include <spdlog/spdlog.h>
 
 void InsertModeHandler::handle(SDL_Event *e, std::vector<Line> *lines,
-                               Line *line,MODE *mode,
-                               Cursor *cursor) {
+                               Line *line, MODE *mode, Cursor *cursor) {
   if ((*e).type == SDL_KEYDOWN) {
     SDL_Keysym keysym = (*e).key.keysym;
     switch (keysym.sym) {
@@ -14,7 +13,7 @@ void InsertModeHandler::handle(SDL_Event *e, std::vector<Line> *lines,
       break;
     case SDLK_RETURN:
       lines->push_back(*line);
-      line->setLineNumber(line->getLineNumber()+1);
+      line->setLineNumber(line->getLineNumber() + 1);
       line->setLastLineHeight(line->getLineHeight());
       line->setText("");
       cursor->moveToNextLine();
@@ -31,6 +30,9 @@ void InsertModeHandler::handle(SDL_Event *e, std::vector<Line> *lines,
       break;
     case SDLK_BACKSPACE:
       line->removeCharAtEnd();
+      if (line->getLength() == 0) {
+        // lines->erase(line->getLineNumber());
+      }
       cursor->moveleft();
       break;
     default:

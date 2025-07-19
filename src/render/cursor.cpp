@@ -22,10 +22,10 @@ void Cursor::moveup() {
 }
 
 void Cursor::moveright() {
-  this->m_x += this->m_w;
-  if (m_x >= this->max_x) {
-    m_x = this->max_x;
-  }
+		this->m_x += this->m_w;
+	if (m_x >= this->max_x) {
+		m_x = this->max_x;
+	}
 }
 
 void Cursor::moveleft() {
@@ -37,7 +37,7 @@ void Cursor::moveleft() {
 
 void Cursor::movedown() {
   this->m_y += this->m_h;
-  if (m_y > this->max_y) {
+  if (m_y >= this->max_y) {
     m_y = this->max_y;
   }
 }
@@ -71,13 +71,9 @@ void Cursor::reset() {
   this->m_y = 0;
 }
 
-void Cursor::setMaxX(int maxX) {
-    this->max_x = maxX * CURSOR_WIDTH;
-}
+void Cursor::setMaxX(int maxX) { this->max_x = maxX * CURSOR_WIDTH; }
 
-void Cursor::setMaxY(int maxY) {
-    this->max_y = maxY * FONT_SIZE;
-}
+void Cursor::setMaxY(int maxY) { this->max_y = maxY * FONT_SIZE; }
 
 int Cursor::getMaxX() const { return this->max_x; }
 

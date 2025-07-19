@@ -81,9 +81,11 @@ void AppWindow::eventLoop() {
         switch (keysym.sym) {
         case SDLK_UP:
           cursor.moveup();
+          m_current_line = &lines.at(cursor.getY()/ FONT_SIZE);
           break;
         case SDLK_DOWN:
           cursor.movedown();
+          m_current_line = &lines.at(cursor.getY() / FONT_SIZE);
           break;
         case SDLK_RIGHT:
           cursor.moveright();
@@ -95,34 +97,38 @@ void AppWindow::eventLoop() {
           handleEvent();
           break;
         }
-        Pos pos = {0, 0};
-        for (size_t i = 0; i < lines.size(); i++) {
-          Line *current_line = &lines.at(i);
-          pos.x = 0;
-          pos.y += current_line->getLastLineHeight();
-          if (current_line->getText().length() > 0) {
-            textRenderer.render_text(m_window, m_renderer, &lines.at(i), GREEN,
-                                     &cursor, pos);
-            cursor.setMaxY(pos.y);
-          }
-        }
-        if (m_current_line->getText().size() > 0) {
-          pos.x = 0;
-          pos.y += m_current_line->getLastLineHeight();
-          textRenderer.render_text(m_window, m_renderer, m_current_line, GREEN,
-                                   &cursor, pos);
-          cursor.setMaxY(pos.y);
-        }
       }
     }
+    printLines();
     cursor.setMaxX(m_current_line->getText().length());
     renderCursor();
     SDL_RenderPresent(m_renderer);
   }
 }
-
+void AppWindow::printLines() {
+  Pos pos = {0, 0};
+  for (size_t i = 0; i < lines.size(); i++) {
+    Line *current_line = &lines.at(i);
+    pos.x = 0;
+    pos.y += current_line->getLastLineHeight();
+    if (current_line->getText().length() > 0) {
+      textRenderer.render_text(m_window, m_renderer, &lines.at(i), GREEN,
+                               &cursor, pos);
+      cursor.setMaxY(pos.y);
+    }
+  }
+  if (m_current_line->getText().size() > 0) {
+    pos.x = 0;
+    pos.y += m_current_line->getLastLineHeight();
+    textRenderer.render_text(m_window, m_renderer, m_current_line, GREEN,
+                             &cursor, pos);
+    cursor.setMaxY(pos.y);
+  }
+}
 void AppWindow::renderCursor() {
   SDL_Rect rect = cursor.getRect();
+	SPDLOG_INFO(m_current_line->getText());
+	rect.x = m_current_line->getText().length()*CURSOR_WIDTH;
   SDL_SetRenderDrawColor(m_renderer, BLUE.r, BLUE.g, BLUE.b, BLUE.a);
   SDL_SetRenderDrawBlendMode(m_renderer, SDL_BLENDMODE_ADD);
   SDL_RenderFillRect(m_renderer, &rect);

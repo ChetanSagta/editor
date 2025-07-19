@@ -36,4 +36,5 @@ private:
   std::vector<Line> lines;
   Line *m_current_line;
   void renderCursor();
+  void printLines();
 };

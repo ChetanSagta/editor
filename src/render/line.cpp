@@ -24,6 +24,10 @@ void Line::addCharsAtEnd(std::string characaters){
   m_line_height = characaters.size()%FONT_SIZE;
 }
 
+int Line::getLength() const{
+  return this->m_content.length();
+}
+
 void Line::print(){
   SPDLOG_INFO("{}",m_content);
 }
